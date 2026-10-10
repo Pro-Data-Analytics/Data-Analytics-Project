@@ -9,7 +9,6 @@
 - **Install dependencies:** Install the required Python libraries and a compatible Microsoft SQL Server ODBC driver before execution.
 - **Excel sheet names:** The worksheet names specified in the script must match the names in your Excel workbook.
 - **Table replacement warning:** The script uses `if_exists="replace"`. If a destination table already exists, it will be dropped and recreated. Existing data and table-specific constraints or indexes may be lost.
-- **Dataset availability:** The Excel dataset is not included in this repository unless redistribution is permitted. Obtain the dataset separately and place it in your configured file path.
 
 ## Security and Privacy
 
