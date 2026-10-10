@@ -1,0 +1,97 @@
+# select partcular sheets
+import pandas as pd
+from sqlalchemy import create_engine
+
+excel_file = r"your excel path"
+
+server = your server name
+database = "your database name"
+
+connection_string = (
+    f"mssql+pyodbc://{server}/{database}"
+    "?driver=ODBC+Driver+17+for+SQL+Server"
+    "&trusted_connection=yes"
+)
+
+engine = create_engine(connection_string)
+
+# Tables to import
+sheets = [
+    "FactOrderLine",
+    "DimProduct",
+    "DimCustomer"
+]
+
+for sheet_name in sheets:
+
+    df = pd.read_excel(
+        excel_file,
+        sheet_name=sheet_name
+    )
+
+    df.to_sql(
+        name=sheet_name,
+        con=engine,
+        schema="dbo",
+        if_exists="replace",
+        index=False
+    )
+
+    print(f"Imported: {sheet_name} -> dbo.{sheet_name}")
+
+engine.dispose()
+
+print("Selected tables imported successfully!")
+
+
+# select all sheets except any one like data dictionary
+
+import pandas as pd
+from sqlalchemy import create_engine
+from urllib.parse import quote_plus
+
+# Excel file path
+excel_file = r"D:\YT\SQL\Ecommerce.xlsx"
+
+# SQL Server configuration
+server = r"DESKTOP-FRF391N\SQLEXPRESS"
+database = "E-Commerce"
+
+# Windows Authentication
+connection_string = (
+    f"mssql+pyodbc://{server}/{database}"
+    "?driver=ODBC+Driver+17+for+SQL+Server"
+    "&trusted_connection=yes"
+)
+
+engine = create_engine(connection_string)
+
+# Read all Excel sheets
+all_sheets = pd.read_excel(
+    excel_file,
+    sheet_name=None
+)
+
+# Import each sheet except the Data Dictionary
+for sheet_name, df in all_sheets.items():
+
+    if sheet_name == "Data Dictionary":
+        continue
+
+    table_name = sheet_name.strip().replace(" ", "_")
+
+    df.to_sql(
+        name=table_name,
+        con=engine,
+        schema="dbo",
+        if_exists="replace",
+        index=False
+    )
+
+    print(f"Imported: {sheet_name} -> dbo.{table_name}")
+
+engine.dispose()
+
+print("All data tables imported successfully!")
+
+
